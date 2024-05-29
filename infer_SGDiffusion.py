@@ -93,9 +93,9 @@ if __name__ == '__main__':
 
     for step, batch in tqdm(enumerate(dataloader_test)):
         print(step, len(dataloader_test))
-        gt = rearrange(batch['gt'], 'b h w c -> b c h w')
+        # gt = rearrange(batch['gt'], 'b h w c -> b c h w')
         shadowfree_img = rearrange(batch['shadowfree_img_'], 'b h w c -> b c h w')
-        shadow_mask_ = batch['shadow_mask_'].unsqueeze(0)
+        # shadow_mask_ = batch['shadow_mask_'].unsqueeze(0)
         background_shadow_mask_ = batch['background_shadow_mask_'].unsqueeze(0)
         background_object_mask_ = batch['background_object_mask_'].unsqueeze(0) 
         object_mask_ = batch['object_mask_'].unsqueeze(0)
@@ -118,15 +118,15 @@ if __name__ == '__main__':
                 images[k] = torch.clamp(images[k], -1., 1.)
         img_to_save = []
 
-        gt_img = trans_tensor2img(gt.squeeze(0))
-        gt_object_mask_img = trans_tensor2img(object_mask_.squeeze(0),if_mask=True)
+        # gt_img = trans_tensor2img(gt.squeeze(0))
+        # gt_object_mask_img = trans_tensor2img(object_mask_.squeeze(0),if_mask=True)
         resultlist = []
-        resultlist.append(gt_img)
-        resultlist.append(gt_object_mask_img)
+        # resultlist.append(gt_img)
+        # resultlist.append(gt_object_mask_img)
 
         for i in range(5):
-            result_img = F.interpolate(images['samples_cfg_scale_9.00'][i].unsqueeze(0), size=(256, 256), mode='bilinear', align_corners=True)
-            result_mask = F.interpolate(images['predicted_mask'][i].unsqueeze(0), size=(256, 256), mode='bilinear', align_corners=True)
+            result_img = F.interpolate(images['samples_cfg_scale_1.00'][i].unsqueeze(0), size=(512, 512), mode='bilinear', align_corners=True)
+            result_mask = F.interpolate(images['predicted_mask'][i].unsqueeze(0), size=(512, 512), mode='bilinear', align_corners=True)
             
             result_img_pil = trans_tensor2img(result_img.squeeze(0))
             result_img_name = pic_name + '_' + str(i) + extension 
@@ -136,36 +136,18 @@ if __name__ == '__main__':
             result_mask_name = pic_name + '_' + str(i) + extension 
             result_mask_pil.save(os.path.join(args.save_dir,'gen_mask', result_mask_name))
 
-            gt_img = trans_tensor2img(gt.squeeze(0))
-            gt_img_name = pic_name + '_' + str(i) + extension
-            gt_img.save(os.path.join(args.save_dir, "gt_shadow_img", gt_img_name))
+            # gt_img = trans_tensor2img(gt.squeeze(0))
+            # gt_img_name = pic_name + '_' + str(i) + extension
+            # gt_img.save(os.path.join(args.save_dir, "gt_shadow_img", gt_img_name))
 
             shadowfree_image = trans_tensor2img(shadowfree_img.squeeze(0))
             shadowfree_img_name = pic_name + '_' + str(i) + extension
             shadowfree_image.save(os.path.join(args.save_dir, "gt_shadowfree_img", shadowfree_img_name))
 
-            gt_shadow_mask_img = trans_tensor2img(shadow_mask_.squeeze(0),if_mask=True)
-            gt_shadow_mask_img_name = pic_name + '_' + str(i) + extension 
-            gt_shadow_mask_img.save(os.path.join(args.save_dir,'gt_shadow_mask', gt_shadow_mask_img_name))
+            # gt_shadow_mask_img = trans_tensor2img(shadow_mask_.squeeze(0),if_mask=True)
+            # gt_shadow_mask_img_name = pic_name + '_' + str(i) + extension 
+            # gt_shadow_mask_img.save(os.path.join(args.save_dir,'gt_shadow_mask', gt_shadow_mask_img_name))
 
-            gt_object_mask_img = trans_tensor2img(object_mask_.squeeze(0),if_mask=True)
-            gt_object_mask_img_name = pic_name + '_' + str(i) + extension 
-            gt_object_mask_img.save(os.path.join(args.save_dir,'gt_object_mask', gt_object_mask_img_name))
-
-            
-            
-
-            
-
-
-
-
-
-            
-
-
-            
-        
-
-
-
+            # gt_object_mask_img = trans_tensor2img(object_mask_.squeeze(0),if_mask=True)
+            # gt_object_mask_img_name = pic_name + '_' + str(i) + extension 
+            # gt_object_mask_img.save(os.path.join(args.save_dir,'gt_object_mask', gt_object_mask_img_name))

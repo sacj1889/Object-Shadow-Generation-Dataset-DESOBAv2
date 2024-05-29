@@ -392,7 +392,7 @@ class ControlLDM(LatentDiffusion):
         self.control_scales = [1.0] * 13
         self.mask_predictor = MaskPredictor_decoder()
         if os.path.exists('./data/ckpt/mask_predictor.ckpt'):
-            self.mask_predictor.load_state_dict(torch.load('./data/ckpt/mask_predictor.ckpt'))
+            self.mask_predictor.load_state_dict(torch.load('./data/ckpt/mask_predictor.ckpt',map_location='cuda:0'))
         self.scale_encoder = Encoder_ResNet18()
         self.predict_scale_bias = PredictScaleBias()
         self.mask_threshold = 0.5
@@ -448,7 +448,7 @@ class ControlLDM(LatentDiffusion):
     @torch.no_grad()
     def log_images(self, batch, N=5, n_row=2, sample=False, ddim_steps=50, ddim_eta=0.0, return_keys=None,
                    quantize_denoised=True, inpaint=True, plot_denoise_rows=False, plot_progressive_rows=True,
-                   plot_diffusion_rows=False, unconditional_guidance_scale=9.0, unconditional_guidance_label=None,
+                   plot_diffusion_rows=False, unconditional_guidance_scale=1., unconditional_guidance_label=None,
                    use_ema_scope=True, use_x_T=False,
                    **kwargs):
         use_ddim = ddim_steps is not None
